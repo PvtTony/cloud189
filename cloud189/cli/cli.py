@@ -282,8 +282,17 @@ class Commander:
             self.refresh(self._last_work_id)
         elif dir_name == '.':
             pass
-        elif folder := self._file_list.find_by_name(dir_name):
-            self.refresh(folder.id)
+#        elif folder := self._file_list.find_by_name(dir_name):
+        elif folders_name := dir_name.split('/'):
+            if dir_name.startswith('/'):
+                self.refresh(-11)
+            for f_name in folders_name:
+                if f_name == '': continue
+                if folder := self._file_list.find_by_name(f_name):
+                    self.refresh(folder.id)
+                else:
+                    error(f'文件夹不存在: {dir_name}')
+                    return
         else:
             error(f'文件夹不存在: {dir_name}')
 
